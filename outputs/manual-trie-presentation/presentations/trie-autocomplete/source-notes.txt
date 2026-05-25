@@ -1,0 +1,7 @@
+Sources used:
+- README.md: project overview, run commands, component structure, algorithm descriptions
+- src/trie.js: TrieNode/Trie implementation and method behavior
+- src/App.jsx: React state separation, localStorage, React Flow visualization, controls, UI features
+- Local app screenshot: assets/app-demo-prefix-app.png captured from http://127.0.0.1:5173 with prefix "app"
+
+No external factual claims or third-party brand assets are used.

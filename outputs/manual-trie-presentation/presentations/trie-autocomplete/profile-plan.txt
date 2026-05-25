@@ -1,0 +1,9 @@
+task mode: create
+primary deck-profile: engineering-platform
+secondary gates: Korean classroom presentation, data-structure assignment clarity
+required proof objects: Trie structure diagram, algorithm flow, visualization pipeline, working app screenshot
+source requirements: local project source files and README only
+asset requirements: captured local app screenshot at assets/app-demo-prefix-app.png
+brand constraints: no external logos; use technology names as text only
+QA gates: every slide must have one clear claim, technical labels must remain accurate, diagrams must stay readable at thumbnail size
+known missing inputs: exact presentation duration not specified, so deck is built for a 5-7 minute assignment presentation

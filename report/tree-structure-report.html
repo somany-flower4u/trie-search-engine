@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Trie 자동완성 검색엔진 과제 보고서</title>
+    <style>
+      @page { size: A4; margin: 16mm; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        color: #172033;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+        line-height: 1.58;
+      }
+      h1, h2, h3, p { margin: 0; }
+      .page { break-after: page; min-height: 266mm; }
+      .cover {
+        display: flex;
+        min-height: 266mm;
+        flex-direction: column;
+        justify-content: center;
+        border-left: 8px solid #0ea5e9;
+        padding-left: 36px;
+      }
+      .eyebrow { color: #0ea5e9; font-size: 14px; font-weight: 800; letter-spacing: .04em; }
+      h1 { margin-top: 18px; max-width: 760px; font-size: 42px; line-height: 1.18; }
+      .subtitle { margin-top: 20px; max-width: 760px; color: #475569; font-size: 18px; }
+      h2 { margin-bottom: 18px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-size: 25px; }
+      h3 { margin: 18px 0 8px; font-size: 18px; }
+      ul { margin: 8px 0 0; padding-left: 20px; }
+      .grid { display: grid; gap: 14px; }
+      .two { grid-template-columns: 1fr 1fr; }
+      .card { border: 1px solid #dbe4ef; border-radius: 8px; background: #f8fafc; padding: 14px 16px; }
+      table { width: 100%; border-collapse: collapse; border: 1px solid #dbe4ef; font-size: 13px; }
+      th, td { border-bottom: 1px solid #e2e8f0; padding: 9px 10px; text-align: left; vertical-align: top; }
+      th { background: #eff6ff; color: #075985; font-weight: 800; }
+      tr:last-child td { border-bottom: 0; }
+      code, pre { font-family: Menlo, Consolas, monospace; }
+      pre { border-radius: 8px; background: #0f172a; color: #e2e8f0; font-size: 11px; line-height: 1.55; padding: 14px; white-space: pre-wrap; }
+      .diagram { width: 100%; border: 1px solid #dbe4ef; border-radius: 10px; background: #fff; padding: 12px; }
+      .screenshot { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; box-shadow: 0 12px 28px rgba(15,23,42,.12); }
+      .caption { margin-top: 8px; color: #64748b; font-size: 12px; }
+      .note { border-left: 4px solid #10b981; background: #ecfdf5; padding: 12px 14px; color: #065f46; }
+    </style>
+  </head>
+  <body>
+    <section class="page cover">
+      <div class="eyebrow">DATA STRUCTURE ASSIGNMENT</div>
+      <h1>Trie 자동완성 검색엔진 구현 보고서</h1>
+      <p class="subtitle">
+        트리 자료구조의 한 종류인 Trie를 사용하여 단어를 문자 단위 노드로 저장하고,
+        삽입, 삭제, 검색, 자동완성, 전체 구조 출력, 통계, 시각화를 제공하는 웹 애플리케이션을 구현하였다.
+      </p>
+      <div style="margin-top: 44px; color: #64748b; font-size: 15px">
+        구현 언어: JavaScript / React<br />
+        주요 라이브러리: React Flow, Tailwind CSS<br />
+        저장 방식: localStorage
+      </div>
+    </section>
+
+    <section class="page">
+      <h2>1. 과제 개요와 적용 자료구조</h2>
+      <div class="grid two">
+        <div class="card">
+          <strong>과제 목표</strong>
+          <p>비선형 자료구조인 Tree를 실제 애플리케이션에 적용하고, Root, Node, Child, Parent, Leaf 개념을 코드와 화면으로 확인한다.</p>
+        </div>
+        <div class="card">
+          <strong>선택 자료구조: Trie</strong>
+          <p>Trie는 문자열을 문자 단위 노드로 저장하는 N-ary Tree이다. 각 노드는 여러 자식 문자를 가질 수 있어 자동완성 기능에 적합하다.</p>
+        </div>
+      </div>
+
+      <h3>구현 기능</h3>
+      <ul>
+        <li>단어 추가/삭제를 통한 Trie 노드 삽입 및 삭제</li>
+        <li>검색어 입력 시 단어 존재 여부와 탐색 경로 출력</li>
+        <li>prefix 기반 자동완성 추천 결과 최대 5개 표시</li>
+        <li>전위 탐색(Pre-order) 및 너비 우선 탐색(BFS) 구조 출력</li>
+        <li>전체 노드 수, Leaf 노드 수, 단어 끝 노드 수, 최대 깊이 통계 계산</li>
+        <li>React Flow를 활용한 Trie Tree 시각화</li>
+      </ul>
+
+      <h2 style="margin-top: 30px">2. Trie 구조 다이어그램</h2>
+      <div class="diagram">
+        <svg viewBox="0 0 940 430" width="100%" height="400" role="img">
+          <defs>
+            <style>
+              .n { fill: #fff; stroke: #94a3b8; stroke-width: 2; }
+              .r { fill: #0f172a; stroke: #0f172a; }
+              .p { fill: #e0f2fe; stroke: #0ea5e9; }
+              .w { fill: #dcfce7; stroke: #10b981; }
+              .e { stroke: #94a3b8; stroke-width: 2; fill: none; }
+              .t { font: 700 16px -apple-system, BlinkMacSystemFont, sans-serif; fill: #172033; text-anchor: middle; }
+              .rt { fill: #fff; }
+              .small { font: 500 12px -apple-system, BlinkMacSystemFont, sans-serif; fill: #64748b; text-anchor: middle; }
+            </style>
+          </defs>
+          <rect class="r" x="415" y="20" width="110" height="48" rx="8" />
+          <text class="t rt" x="470" y="50">root</text>
+          <line class="e" x1="470" y1="68" x2="260" y2="135" />
+          <line class="e" x1="470" y1="68" x2="470" y2="135" />
+          <line class="e" x1="470" y1="68" x2="680" y2="135" />
+          <rect class="n p" x="220" y="135" width="80" height="46" rx="7" /><text class="t" x="260" y="164">a</text>
+          <rect class="n" x="430" y="135" width="80" height="46" rx="7" /><text class="t" x="470" y="164">b</text>
+          <rect class="n" x="640" y="135" width="80" height="46" rx="7" /><text class="t" x="680" y="164">c</text>
+
+          <line class="e" x1="260" y1="181" x2="260" y2="238" />
+          <rect class="n p" x="220" y="238" width="80" height="46" rx="7" /><text class="t" x="260" y="267">p</text>
+          <line class="e" x1="260" y1="284" x2="260" y2="341" />
+          <rect class="n w" x="220" y="341" width="80" height="46" rx="7" /><text class="t" x="260" y="370">p*</text>
+          <text class="small" x="260" y="405">app</text>
+
+          <line class="e" x1="300" y1="364" x2="410" y2="364" />
+          <rect class="n w" x="410" y="341" width="80" height="46" rx="7" /><text class="t" x="450" y="370">l</text>
+          <line class="e" x1="490" y1="364" x2="600" y2="364" />
+          <rect class="n w" x="600" y="341" width="80" height="46" rx="7" /><text class="t" x="640" y="370">y*</text>
+          <text class="small" x="640" y="405">apply</text>
+
+          <line class="e" x1="470" y1="181" x2="470" y2="238" />
+          <rect class="n" x="430" y="238" width="80" height="46" rx="7" /><text class="t" x="470" y="267">a</text>
+          <line class="e" x1="680" y1="181" x2="680" y2="238" />
+          <rect class="n" x="640" y="238" width="80" height="46" rx="7" /><text class="t" x="680" y="267">a</text>
+          <text class="small" x="470" y="316">banana, band...</text>
+          <text class="small" x="680" y="316">cat, car...</text>
+        </svg>
+      </div>
+      <p class="caption">별표(*)는 단어 끝 노드이며, 같은 prefix를 가진 단어는 같은 경로를 공유한다.</p>
+    </section>
+
+    <section class="page">
+      <h2>3. 자료구조 설계 설명</h2>
+      <h3>TrieNode 구조</h3>
+      <p>각 노드는 문자, 경로, 메타데이터, 단어 끝 여부, 자식 배열을 가진다. 자식 수가 고정되지 않으므로 children 배열을 사용해 N-ary Tree 형태를 구현했다.</p>
+      <pre>class TrieNode {
+  constructor(char = "root", path = "root") {
+    this.char = char;
+    this.path = path;
+    this.name = path === "root" ? "Root Node" : `문자 노드 '${char}'`;
+    this.description = `"${path}" prefix를 표현하는 문자 노드`;
+    this.owner = "자료구조 담당";
+    this.status = "구현 완료";
+    this.isEndOfWord = false;
+    this.children = [];
+  }
+}</pre>
+      <h3>Trie를 선택한 이유</h3>
+      <div class="grid two">
+        <div class="card">
+          <strong>자동완성에 적합</strong>
+          <p>prefix 노드까지만 이동하면 그 하위 트리 전체가 추천 후보가 되므로 자동완성 구현이 자연스럽다.</p>
+        </div>
+        <div class="card">
+          <strong>공통 prefix 공유</strong>
+          <p>app, apple, application처럼 같은 접두사를 가진 단어들이 같은 노드를 공유하여 구조적으로 표현된다.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top: 30px">4. 핵심 알고리즘</h2>
+      <table>
+        <thead><tr><th>기능</th><th>구현 방식</th><th>복잡도</th></tr></thead>
+        <tbody>
+          <tr><td>Insert</td><td>단어의 문자를 하나씩 따라가며 없는 자식 노드를 생성</td><td>O(L)</td></tr>
+          <tr><td>Delete</td><td>단어 끝 표시를 해제하고 공유되지 않는 말단 노드 제거</td><td>O(L)</td></tr>
+          <tr><td>Search</td><td>문자 경로를 따라간 뒤 마지막 노드의 isEndOfWord 확인</td><td>O(L)</td></tr>
+          <tr><td>Autocomplete</td><td>prefix 노드까지 이동 후 DFS로 추천 단어 수집</td><td>O(L + K)</td></tr>
+          <tr><td>Pre-order</td><td>현재 노드 출력 후 자식 노드를 재귀 방문</td><td>O(N)</td></tr>
+          <tr><td>BFS</td><td>Queue로 같은 깊이의 노드를 먼저 방문</td><td>O(N)</td></tr>
+        </tbody>
+      </table>
+      <p class="caption">L = 입력 문자열 길이, K = 추천 수집 중 방문한 노드 수, N = Trie 전체 노드 수</p>
+    </section>
+
+    <section class="page">
+      <h2>5. 실행 결과 캡처</h2>
+      <h3>자동완성, 시각화, 전위 탐색 출력</h3>
+      <img class="screenshot" src="assets/01-trie-main.png" alt="Trie 메인 화면" />
+      <p class="caption">prefix 입력 시 추천 결과와 탐색 경로가 갱신되고, 오른쪽에서 Trie Tree가 시각화된다.</p>
+    </section>
+
+    <section class="page">
+      <h2>6. 검색 및 통계 기능</h2>
+      <h3>단어 검색과 노드 메타데이터</h3>
+      <img class="screenshot" src="assets/02-word-search.png" alt="단어 검색 결과" />
+      <p class="caption">검색한 단어의 존재 여부, root부터의 경로, 노드 이름/설명/담당자/상태가 출력된다.</p>
+      <h3 style="margin-top: 22px">BFS 구조 출력</h3>
+      <img class="screenshot" src="assets/03-bfs-traversal.png" alt="BFS 구조 출력" />
+      <p class="caption">BFS 버튼을 누르면 Queue 기반 너비 우선 탐색 결과가 depth와 함께 출력된다.</p>
+    </section>
+
+    <section class="page">
+      <h2>7. 결론</h2>
+      <p class="note">
+        본 프로젝트는 Trie라는 트리 자료구조를 사용하여 자동완성 검색엔진을 구현했다.
+        각 문자 노드는 자식 배열을 가지는 N-ary Tree 노드이며, 단어 삽입/삭제/검색/자동완성뿐 아니라
+        전위 탐색, BFS, 통계, 시각화 기능까지 구현하여 과제의 필수 요구사항을 만족한다.
+      </p>
+      <h3>제출 파일</h3>
+      <ul>
+        <li>소스 코드: <code>src/trie.js</code>, <code>src/App.jsx</code></li>
+        <li>보고서 PDF: <code>report/tree-structure-report.pdf</code></li>
+        <li>실행 캡처: <code>report/assets/01-trie-main.png</code>, <code>02-word-search.png</code>, <code>03-bfs-traversal.png</code></li>
+      </ul>
+    </section>
+  </body>
+</html>

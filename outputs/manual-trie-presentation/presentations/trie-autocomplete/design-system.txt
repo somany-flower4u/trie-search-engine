@@ -1,0 +1,11 @@
+Slide size: 1280x720.
+Background: warm off-white base with dark ink title areas and light technical surfaces.
+Typography: Apple SD Gothic Neo for Korean text, Menlo for code-like labels.
+Palette: ink #172033, paper #F6F8FB, sky #0EA5E9, emerald #10B981, rose #F43F5E, amber #F59E0B, slate #64748B.
+Chart grammar: simple bars and metric chips only; direct labels, no legends.
+Diagram grammar: rectangular nodes, thin connector rules, directional flow where dependency matters.
+Connector grammar: blue for prefix traversal, green for recommendation paths, slate for neutral relationships.
+Footer grammar: slide number and project label in small slate text.
+Title grammar: small kicker plus one claim-style title.
+Layout families: cover, comparison, structure diagram, algorithm flow, pipeline, screenshot proof, responsibility map, closing script.
+Banned motifs: decorative blobs, generic card grids, fake logos, dense paragraphs.
