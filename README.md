@@ -86,7 +86,6 @@ src/
   styles.css       Tailwind 지시문과 전역 스타일
 index.html         Vite 진입 HTML
 report/            과제 보고서(HTML, PDF)와 화면 캡처
-outputs/           발표 자료(pptx)와 제작 과정 파일
 ```
 
 ## 알려진 한계

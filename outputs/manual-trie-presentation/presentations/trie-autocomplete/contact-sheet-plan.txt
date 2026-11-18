@@ -1,8 +1,0 @@
-Slide 01: cover with simplified Trie diagram and feature rail.
-Slide 02: two-column problem comparison.
-Slide 03: large Trie structure diagram.
-Slide 04: operation flow and complexity table.
-Slide 05: horizontal implementation pipeline.
-Slide 06: screenshot proof with numbered callouts.
-Slide 07: codebase responsibility map.
-Slide 08: demo script and closing summary.
